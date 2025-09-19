@@ -7,7 +7,7 @@
 
 typedef struct Game{
     SDL_Renderer* render;
-    SDL_Surface* ventana;
+    SDL_Window* ventana;
     SDL_Event e;
 
     Mouse mouse;
