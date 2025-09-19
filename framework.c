@@ -1,33 +1,4 @@
-#include <SDL.h>
-#include <stdio.h>
-#include <stdbool.h>
-
-typedef struct Game{
-    SDL_Renderer* render;
-    SDL_Surface* ventana;
-    SDL_Event e;
-
-    Mouse mouse;
-}Game;
-
-typedef struct Sprite{
-    SDL_Surface* surface;
-    SDL_Texture* texture;
-    SDL_Rect src;
-    SDL_Rect dest;
-    Vector2D position;
-}Sprite;
-
-typedef struct Vector2D{
-    int posX;
-    int posY;
-}Vector2D;
-
-typedef struct Mouse{
-    int posm_x;
-    int posm_y;
-
-}Mouse;
+#include "framework.h"
 
 // Initializing function for any texture
 int createSprite(Game* game, Sprite* sprite, 
