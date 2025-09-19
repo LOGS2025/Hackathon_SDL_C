@@ -8,6 +8,22 @@ int gameLoop(Game* game, Sprite* sprite){
     renderSprite(&game);
     destroySprite(&sprite);
 }
+int close(Game* game)
+{
+    SDL_Event e; 
+    bool quit = false; 
+    while( quit == false ){ 
+        while( SDL_PollEvent( &e ) ){ 
+            if( e.type == SDL_QUIT ) quit = true; 
+        } 
+    }
+    TTF_CloseFont(game->font);
+    TTF_Quit();
+    SDL_DestroyRenderer(game->render);
+    SDL_DestroyWindow(game->ventana);
+    SDL_Quit();
+    return 0;
+}
 
 int init(Game* game, int win_h, int win_w){
     game->ventana = NULL;
@@ -65,6 +81,7 @@ int init(Game* game, int win_h, int win_w){
             
             Game game; 
             Sprite monito[2];
+            int x,y,w,h;
 
             init(&game, 600,800);
             createSprite(&game, &monito[0], x,y, w, h, "Charly", 5, 60,30 );
