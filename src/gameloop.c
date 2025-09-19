@@ -4,15 +4,18 @@ int x,y,w,h;
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
-    createSprite(game, sprite, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
 
+    game->pkeys = SDL_GetKeyboardState(NULL);
+
+    createSprite(game, sprite, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
+    printf("Cprite created!!!\n");
     while( game->running == 1 ){ 
         while( SDL_PollEvent( &game->e ) ){ 
             if( game->e.type == SDL_QUIT )  game->running = 0; 
             
             // Happpen conditionally
-            if(game->e.type == SDL_SCANCODE_0){
-                printf("Presionaste ")
+            if(game->pkeys[SDL_SCANCODE_1]){
+                printf("Presionaste 0!!!\n");
                 placeSprite(game, sprite);
             }
    
@@ -92,6 +95,7 @@ int main(int argc, char* argv[]){
     Sprite monito;
 
     init(&game, 600,800);
+    printf("Game running = %i\n", game.running);
 
     gameLoop(&game, &monito);
 

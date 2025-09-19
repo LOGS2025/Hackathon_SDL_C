@@ -26,6 +26,8 @@ typedef struct Game{
 
     int running;
 
+    const Uint8* pkeys;
+
 }Game;
 
 typedef struct Sprite{
