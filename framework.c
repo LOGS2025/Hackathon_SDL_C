@@ -65,7 +65,7 @@ int updateSprite(Game* game, Sprite* sprite){
 }       
 
 int renderSprite(){
-
+djwawpifhioefhoesifhoesif
 }
 
 void destroySprite(){
