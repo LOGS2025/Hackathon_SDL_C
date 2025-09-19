@@ -4,7 +4,7 @@ int x,y,w,h;
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
-    createSprite(&game, &sprite[0], x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
+    createSprite(game, sprite, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
 
     while( game->running == 1 ){ 
         while( SDL_PollEvent( &game->e ) ){ 
@@ -12,15 +12,16 @@ int gameLoop(Game* game, Sprite* sprite){
             
             // Happpen conditionally
             if(game->e.type == SDL_SCANCODE_0){
-                placeSprite(&game, &sprite);
+                printf("Presionaste ")
+                placeSprite(game, sprite);
             }
    
             // Always happens
-            updateSprite(&game, &sprite);
-            renderSprite(&game);
+            updateSprite(game, sprite);
+            renderSprite(game);
         } 
     }
-    destroySprite(&sprite);
+    destroySprite(sprite);
 }
 
 int close(Game* game)
@@ -88,7 +89,7 @@ int init(Game* game, int win_h, int win_w){
 int main(int argc, char* argv[]){
     
     Game game; 
-    Sprite monito[2];
+    Sprite monito;
 
     init(&game, 600,800);
 

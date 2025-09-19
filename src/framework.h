@@ -1,9 +1,21 @@
 #ifndef FRAMEWORK_H
 #define FRAMEWORK_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
+
+typedef struct Vector2D{
+    int posX;
+    int posY;
+}Vector2D;
+
+typedef struct Mouse{
+    int posm_x;
+    int posm_y;
+
+}Mouse;
 
 typedef struct Game{
     SDL_Renderer* render;
@@ -28,16 +40,6 @@ typedef struct Sprite{
     int prop1;
 }Sprite;
 
-typedef struct Vector2D{
-    int posX;
-    int posY;
-}Vector2D;
-
-typedef struct Mouse{
-    int posm_x;
-    int posm_y;
-
-}Mouse;
 
 int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h, char* spriteName, int prop1, char* filepath, int dest_h, int dest_w);
 
