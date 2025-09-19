@@ -13,7 +13,7 @@ typedef struct Game{
     Mouse mouse;
 
     int running;
-    
+
 }Game;
 
 typedef struct Sprite{
@@ -39,7 +39,7 @@ typedef struct Mouse{
 
 }Mouse;
 
-int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h, char* spriteName, int prop1, int dest_h, int dest_w);
+int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h, char* spriteName, int prop1, char* filepath, int dest_h, int dest_w);
 
 int placeSprite(Game* game, Sprite* sprite);
 

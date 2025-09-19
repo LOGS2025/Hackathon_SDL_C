@@ -4,7 +4,7 @@ int x,y,w,h;
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
-    createSprite(&game, &sprite[0], x,y, w, h, "Charly", 5, 60,30 );
+    createSprite(&game, &sprite[0], x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
 
     while( game->running == 1 ){ 
         while( SDL_PollEvent( &game->e ) ){ 
@@ -95,4 +95,6 @@ int main(int argc, char* argv[]){
     gameLoop(&game, &monito);
 
     close(&game);           
+
+    return 0;
 }

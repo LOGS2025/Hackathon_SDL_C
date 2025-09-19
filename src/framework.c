@@ -3,9 +3,9 @@
 // Initializing function for any texture
 int createSprite(Game* game, Sprite* sprite, 
     int x, int y, int src_w, int src_h, char* spriteName, 
-    int prop1 /* , Filepath*/, int dest_h, int dest_w){
+    int prop1, char* filepath, int dest_h, int dest_w){
     // Load the image into the surface
-    sprite->surface = IMG_Load("");
+    sprite->surface = IMG_Load(filepath);
     if(!sprite->surface){
         printf("Error loading sprite surface\n");
         return 1;
