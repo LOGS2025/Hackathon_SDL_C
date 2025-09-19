@@ -1,8 +1,13 @@
 #include <SDL.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 typedef struct Game{
     SDL_Renderer* render;
+    SDL_Surface* ventana;
+    SDL_Event e;
 
+    Mouse mouse;
 }Game;
 
 typedef struct Sprite{
@@ -17,6 +22,12 @@ typedef struct Vector2D{
     int posX;
     int posY;
 }Vector2D;
+
+typedef struct Mouse{
+    int posm_x;
+    int posm_y;
+
+}Mouse;
 
 // Initializing function for any texture
 int createSprite(Game* game, Sprite* sprite, 
@@ -61,30 +72,25 @@ int placeSprite(Game* game, Sprite* sprite){
         sprite->position.posY = (game->mouse.posm_y); 
 
         // We copy it for the render to do the work
-        SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->Dest);
+        SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest);
     }
     return 0;
 }
 
 // This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
 int updateSprite(Game* game, Sprite* sprite){
-    if(game->e.type == SDL_MOUSEBUTTONUP){
-        game->mouse.mouse_down = false;
-    }   
-    while(game->e.type == SDL_MOUSEBUTTONDOWN){
-        if(){
-            SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
-        }
-        int x = (game->mouse.posm_x)/TILE_DEST_SIZE; // where mouse is ON OUR WINDOW, not on the game surface!
-        int y = (game->mouse.posm_y)/TILE_DEST_SIZE; // where mouse is ON OUR WINDOW, not on the game surface!!!!!!!
-        game->mouse.mouse_down = true; // maybe these flags are not needed for these loop but must check with other functions
+    if(game->e.type == SDL_MOUSEBUTTONDOWN){
+        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
+        int x = (game->mouse.posm_x); // where mouse is ON OUR WINDOW, not on the game surface!
+        int y = (game->mouse.posm_y); // where mouse is ON OUR WINDOW, not on the game surface!!!!!!!
     }
+    return 0;
 }       
 
 int renderSprite(Game* game){
     SDL_RenderPresent(game->render);
 }
 
-void destroySprite(){
-
+void destroySprite(Sprite* sprite){
+    SDL_DestroyTexture(sprite->texture);
 }
