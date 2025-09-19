@@ -55,8 +55,10 @@ int updateSprite(Game* game, Sprite* sprite){
         int x = (game->mouse.posm_x); // where mouse is ON OUR WINDOW, not on the game surface!
         int y = (game->mouse.posm_y); // where mouse is ON OUR WINDOW, not on the game surface!!!!!!!
     }
+    sprite->dest.x = game->mouse.posm_x;
+    sprite->dest.y = game->mouse.posm_y;
     return 0;
-}       
+}
 
 int renderSprite(Game* game){
     SDL_RenderPresent(game->render);
