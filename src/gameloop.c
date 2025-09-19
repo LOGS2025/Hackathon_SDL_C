@@ -1,24 +1,32 @@
 #include "gameloop.h"
 #include "framework.h"
+int x,y,w,h;
 
 int gameLoop(Game* game, Sprite* sprite){
+    // Happen once
+    createSprite(&game, &sprite[0], x,y, w, h, "Charly", 5, 60,30 );
 
-    placeSprite(&game, &sprite);
-    updateSprite(&game, &sprite);
-    renderSprite(&game);
-    destroySprite(&sprite);
-}
-int close(Game* game)
-{
-    SDL_Event e; 
-    bool quit = false; 
-    while( quit == false ){ 
-        while( SDL_PollEvent( &e ) ){ 
-            if( e.type == SDL_QUIT ) quit = true; 
+    while( game->running == 1 ){ 
+        while( SDL_PollEvent( &game->e ) ){ 
+            if( game->e.type == SDL_QUIT )  game->running = 0; 
+            
+            // Happpen conditionally
+            if(game->e.type == SDL_SCANCODE_0){
+                placeSprite(&game, &sprite);
+            }
+   
+            // Always happens
+            updateSprite(&game, &sprite);
+            renderSprite(&game);
         } 
     }
-    TTF_CloseFont(game->font);
-    TTF_Quit();
+    destroySprite(&sprite);
+}
+
+int close(Game* game)
+{
+    //TTF_CloseFont(game->font);
+    //TTF_Quit();
     SDL_DestroyRenderer(game->render);
     SDL_DestroyWindow(game->ventana);
     SDL_Quit();
@@ -77,17 +85,14 @@ int init(Game* game, int win_h, int win_w){
         }
         
 
-        int main(int argc, char* argv[]){
-            
-            Game game; 
-            Sprite monito[2];
-            int x,y,w,h;
+int main(int argc, char* argv[]){
+    
+    Game game; 
+    Sprite monito[2];
 
-            init(&game, 600,800);
-            createSprite(&game, &monito[0], x,y, w, h, "Charly", 5, 60,30 );
-            
+    init(&game, 600,800);
 
-            gameLoop(&game, &monito);
+    gameLoop(&game, &monito);
 
-            
+    close(&game);           
 }
