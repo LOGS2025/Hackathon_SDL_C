@@ -1,3 +1,17 @@
+#include <SDL.h>
+
+typedef struct Game{
+    SDL_Renderer* render;
+
+}Game;
+
+typedef struct Sprite{
+    SDL_Surface* surface;
+    SDL_Texture* texture;
+    SDL_Rect* src;
+    SDL_Rect* dest;
+}Sprite;
+
 // Initializing function for any texture
 int createSprite(Game* game, Sprite* sprite, int x, int y, int w, int h, char* spriteName, int prop1 /* , Filepath*/){
     // Load the image into the surface
@@ -65,7 +79,7 @@ int updateSprite(Game* game, Sprite* sprite){
 }       
 
 int renderSprite(){
-djwawpifhioefhoesifhoesif
+
 }
 
 void destroySprite(){
