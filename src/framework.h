@@ -11,14 +11,21 @@ typedef struct Game{
     SDL_Event e;
 
     Mouse mouse;
+
+    int running;
+    
 }Game;
 
 typedef struct Sprite{
     SDL_Surface* surface;
     SDL_Texture* texture;
+    
     SDL_Rect src;
     SDL_Rect dest;
+
     Vector2D position;
+    char* nombre;
+    int prop1;
 }Sprite;
 
 typedef struct Vector2D{
