@@ -14,7 +14,7 @@ typedef struct Vector2D{
 typedef struct Mouse{
     int posm_x;
     int posm_y;
-
+    int bpress;
 }Mouse;
 
 typedef struct Game{
@@ -40,6 +40,8 @@ typedef struct Sprite{
     Vector2D position;
     char* nombre;
     int prop1;
+    int monki_created;
+
 }Sprite;
 
 

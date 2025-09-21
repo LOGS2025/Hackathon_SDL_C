@@ -1,26 +1,37 @@
+/* This file compiles :
+gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
+*/
 #include "gameloop.h"
 #include "framework.h"
-int x,y,w,h;
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
-
     game->pkeys = SDL_GetKeyboardState(NULL);
 
-    createSprite(game, sprite, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
-    printf("Cprite created!!!\n");
     while( game->running == 1 ){ 
+
+        SDL_RenderClear(game->render);
+
         while( SDL_PollEvent( &game->e ) ){ 
             if( game->e.type == SDL_QUIT )  game->running = 0; 
+                SDL_Delay(20);
             
             // Happpen conditionally
-            if(game->pkeys[SDL_SCANCODE_1]){
-                printf("Presionaste 0!!!\n");
-                placeSprite(game, sprite);
+            if(game->pkeys[SDL_SCANCODE_1] && sprite->monki_created == 0){ // Only works once
+                game->mouse.bpress = 1;
+                SDL_Delay(20);
             }
-   
+            if(game->mouse.bpress==1){
+                placeSprite(game, sprite);
+                SDL_Delay(20);
+                sprite->monki_created = 1;
+            }
+            
             // Always happens
-            updateSprite(game, sprite);
+            if(sprite->monki_created == 1){
+                updateSprite(game, sprite);
+            }
+
             renderSprite(game);
         } 
     }
@@ -92,10 +103,18 @@ int init(Game* game, int win_h, int win_w){
 int main(int argc, char* argv[]){
     
     Game game; 
-    Sprite monito;
+    Sprite monito = {.monki_created = 0};
+
+    int x = 80; // Origin from where to cut rect_src
+    int y = 40;
+    int w = 600 - x; // Dimensions of rect_src
+    int h = 500 - y;
 
     init(&game, 600,800);
     printf("Game running = %i\n", game.running);
+
+    createSprite(&game, &monito, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
+    printf("Cprite created!!!\n");
 
     gameLoop(&game, &monito);
 

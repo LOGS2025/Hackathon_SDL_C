@@ -1,4 +1,7 @@
 #include "framework.h"
+/* This file compiles :
+gcc -c src/framework.c -o ofiles/framework.o -IC:/msys64/ucrt64/include/SDL2
+*/
 
 // Initializing function for any texture
 int createSprite(Game* game, Sprite* sprite, 
@@ -33,6 +36,7 @@ int createSprite(Game* game, Sprite* sprite,
 // Once we created a sprite, we need so be able to place it
 int placeSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
+        printf("Mouse pressed!\n");
         SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
         sprite->dest.x = (game->mouse.posm_x); 
         sprite->dest.y = (game->mouse.posm_y); // spawn sprite at the position where the mouse clicked
@@ -43,7 +47,9 @@ int placeSprite(Game* game, Sprite* sprite){
         sprite->position.posY = (game->mouse.posm_y); 
 
         // We copy it for the render to do the work
-        SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest);
+        if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
+        printf("Couldnt render copy\n");
+        game->mouse.bpress = 0; // reset flag
     }
     return 0;
 }
@@ -52,11 +58,11 @@ int placeSprite(Game* game, Sprite* sprite){
 int updateSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
         SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
-        int x = (game->mouse.posm_x); // where mouse is ON OUR WINDOW, not on the game surface!
-        int y = (game->mouse.posm_y); // where mouse is ON OUR WINDOW, not on the game surface!!!!!!!
+        sprite->dest.x = game->mouse.posm_x; // where mouse is ON OUR WINDOW, not on the game surface!
+        sprite->dest.y = game->mouse.posm_y;
     }
-    sprite->dest.x = game->mouse.posm_x;
-    sprite->dest.y = game->mouse.posm_y;
+    if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
+    printf("Couldnt render copy\n");
     return 0;
 }
 
