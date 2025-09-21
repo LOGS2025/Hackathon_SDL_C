@@ -1,12 +1,8 @@
-#include "gameloop.h"
-#include "framework.h"
 /* This file compiles :
 gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
 */
-
-
-int x,y= 0;
-int w,h = 100;
+#include "gameloop.h"
+#include "framework.h"
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
@@ -21,6 +17,7 @@ int gameLoop(Game* game, Sprite* sprite){
                 game->mouse.bpress = 1;
                 printf("Presionaste 1!!!\n");
             }
+            if(game->mouse.bpress==1)
             placeSprite(game, sprite);
             
             // Always happens
@@ -97,6 +94,11 @@ int main(int argc, char* argv[]){
     
     Game game; 
     Sprite monito;
+
+    int x = 80;
+    int y = 40;
+    int w = 600 - x;
+    int h = 500 - y;
 
     init(&game, 600,800);
     printf("Game running = %i\n", game.running);

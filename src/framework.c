@@ -47,7 +47,7 @@ int placeSprite(Game* game, Sprite* sprite){
         sprite->position.posY = (game->mouse.posm_y); 
 
         // We copy it for the render to do the work
-        if(SDL_RenderCopy(game->render, sprite->texture, /*&sprite->src*/ NULL, /*&sprite->dest*/ NULL)!=0)
+        if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
         printf("Couldnt render copy\n");
     }
     return 0;
