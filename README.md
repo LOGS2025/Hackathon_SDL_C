@@ -14,3 +14,11 @@ for a non-specific texture to be rendered and loaded and have an input:
     SDL_Present // Show visible changes!!!
   destroySprite()
     SDL_DestroyTexture // Get rid of our Sprite before closing!
+
+  For input, the difference:
+  Mouse:
+  SDL_GetMouseState()
+  Keyboard:
+  Uint8* pkeys = SDL_GetKeyboardState()
+
+  Both use event.type!!
