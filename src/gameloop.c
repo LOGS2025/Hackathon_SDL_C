@@ -1,24 +1,28 @@
 #include "gameloop.h"
 #include "framework.h"
-int x,y,w,h;
+/* This file compiles :
+gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
+*/
+
+
+int x,y= 0;
+int w,h = 100;
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
-
     game->pkeys = SDL_GetKeyboardState(NULL);
 
-    createSprite(game, sprite, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
-    printf("Cprite created!!!\n");
     while( game->running == 1 ){ 
         while( SDL_PollEvent( &game->e ) ){ 
             if( game->e.type == SDL_QUIT )  game->running = 0; 
             
             // Happpen conditionally
             if(game->pkeys[SDL_SCANCODE_1]){
-                printf("Presionaste 0!!!\n");
-                placeSprite(game, sprite);
+                game->mouse.bpress = 1;
+                printf("Presionaste 1!!!\n");
             }
-   
+            placeSprite(game, sprite);
+            
             // Always happens
             updateSprite(game, sprite);
             renderSprite(game);
@@ -96,6 +100,9 @@ int main(int argc, char* argv[]){
 
     init(&game, 600,800);
     printf("Game running = %i\n", game.running);
+
+    createSprite(&game, &monito, x,y, w, h, "Charly", 5, "assets/monki.jpg" ,60,30);
+    printf("Cprite created!!!\n");
 
     gameLoop(&game, &monito);
 

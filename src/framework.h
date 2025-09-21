@@ -14,7 +14,7 @@ typedef struct Vector2D{
 typedef struct Mouse{
     int posm_x;
     int posm_y;
-
+    int bpress;
 }Mouse;
 
 typedef struct Game{
