@@ -40,6 +40,8 @@ typedef struct Sprite{
     Vector2D position;
     char* nombre;
     int prop1;
+    int monki_created;
+
 }Sprite;
 
 

@@ -49,6 +49,7 @@ int placeSprite(Game* game, Sprite* sprite){
         // We copy it for the render to do the work
         if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
         printf("Couldnt render copy\n");
+        game->mouse.bpress = 0; // reset flag
     }
     return 0;
 }
@@ -57,11 +58,11 @@ int placeSprite(Game* game, Sprite* sprite){
 int updateSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
         SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
-        int x = (game->mouse.posm_x); // where mouse is ON OUR WINDOW, not on the game surface!
-        int y = (game->mouse.posm_y); // where mouse is ON OUR WINDOW, not on the game surface!!!!!!!
+        sprite->dest.x = game->mouse.posm_x; // where mouse is ON OUR WINDOW, not on the game surface!
+        sprite->dest.y = game->mouse.posm_y;
     }
-    sprite->dest.x = game->mouse.posm_x;
-    sprite->dest.y = game->mouse.posm_y;
+    if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
+    printf("Couldnt render copy\n");
     return 0;
 }
 
