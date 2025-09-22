@@ -11,29 +11,26 @@ int gameLoop(Game* game, Sprite* sprite){
     while( game->running == 1 ){ 
 
         SDL_RenderClear(game->render);
+        SDL_Delay(20);
+        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
 
         while( SDL_PollEvent( &game->e ) ){ 
-            if( game->e.type == SDL_QUIT )  game->running = 0; 
-                SDL_Delay(20);
-            
+            if( game->e.type == SDL_QUIT )  
+                game->running = 0;       
             // Happpen conditionally
             if(game->pkeys[SDL_SCANCODE_1] && sprite->monki_created == 0){ // Only works once
                 game->mouse.bpress = 1;
-                SDL_Delay(20);
             }
-            if(game->mouse.bpress==1){
+            if(game->mouse.bpress==1 && sprite->monki_created == 0){
                 placeSprite(game, sprite);
-                SDL_Delay(20);
-                sprite->monki_created = 1;
             }
-            
-            // Always happens
-            if(sprite->monki_created == 1){
-                updateSprite(game, sprite);
-            }
-
-            renderSprite(game);
+            moveSprite(game, sprite);            
         } 
+        // Always happens
+        if(sprite->monki_created == 1){
+            updateSprite(game, sprite);
+        }
+        renderSprite(game);
     }
     destroySprite(sprite);
 }

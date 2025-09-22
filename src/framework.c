@@ -4,9 +4,7 @@ gcc -c src/framework.c -o ofiles/framework.o -IC:/msys64/ucrt64/include/SDL2
 */
 
 // Initializing function for any texture
-int createSprite(Game* game, Sprite* sprite, 
-    int x, int y, int src_w, int src_h, char* spriteName, 
-    int prop1, char* filepath, int dest_h, int dest_w){
+int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h, char* spriteName, int prop1, char* filepath, int dest_h, int dest_w){
     // Load the image into the surface
     sprite->surface = IMG_Load(filepath);
     if(!sprite->surface){
@@ -46,21 +44,41 @@ int placeSprite(Game* game, Sprite* sprite){
         sprite->position.posX = (game->mouse.posm_x); 
         sprite->position.posY = (game->mouse.posm_y); 
 
-        // We copy it for the render to do the work
-        if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
-        printf("Couldnt render copy\n");
         game->mouse.bpress = 0; // reset flag
+        sprite->monki_created = 1; // allows to spawn texture
     }
     return 0;
 }
 
+void moveSprite(Game* game, Sprite* sprite){
+    if(game->e.type == SDL_MOUSEBUTTONDOWN){
+        sprite->position.posY = game->mouse.posm_y;
+        sprite->position.posX = game->mouse.posm_x;
+        printf("Button down pressed\n");
+    }
+}
+
+void pickSprite(Game* game, Sprite* sprite){
+
+}
+
 // This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
 int updateSprite(Game* game, Sprite* sprite){
-    if(game->e.type == SDL_MOUSEBUTTONDOWN){
-        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
-        sprite->dest.x = game->mouse.posm_x; // where mouse is ON OUR WINDOW, not on the game surface!
-        sprite->dest.y = game->mouse.posm_y;
-    }
+    // Get the distance between the mouse click and the sprite
+    if(sprite->position.posX - sprite->dest.x != 0)
+    // Move so the difference is set to zero
+        if(sprite->dest.x < sprite->position.posX)
+            sprite->dest.x += (int)((abs(sprite->position.posX - sprite->dest.x))/60);
+        else if(sprite->dest.x > sprite->position.posX)
+            sprite->dest.x -= (int)((abs(sprite->position.posX - sprite->dest.x))/60);
+            
+    if(sprite->position.posY - sprite->dest.y != 0)
+        if(sprite->dest.y < sprite->position.posY) 
+            sprite->dest.y += (int)((abs(sprite->position.posY - sprite->dest.y))/60);
+        else if(sprite->dest.y > sprite->position.posY)
+            sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y))/60);
+
+
     if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
     printf("Couldnt render copy\n");
     return 0;

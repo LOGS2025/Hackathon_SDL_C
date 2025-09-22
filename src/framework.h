@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct Vector2D{
     int posX;
@@ -48,6 +49,8 @@ typedef struct Sprite{
 int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h, char* spriteName, int prop1, char* filepath, int dest_h, int dest_w);
 
 int placeSprite(Game* game, Sprite* sprite);
+
+void moveSprite(Game* game, Sprite* sprite);
 
 int updateSprite(Game* game, Sprite* sprite);
 
