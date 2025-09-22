@@ -1,12 +1,21 @@
 /* This file compiles :
 gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
 */
+/*
+    Compile all:
+gcc framework.o gameloop.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image 
+-lSDL2_ttf
+*/
 #include "gameloop.h"
 #include "framework.h"
 
 int gameLoop(Game* game, Sprite* sprite){
     // Happen once
     game->pkeys = SDL_GetKeyboardState(NULL);
+
+    //SDL_SetRenderDrawColor(game->render, 255, 255, 255, 255);
+
+    SDL_RenderPresent(game->render);
 
     while( game->running == 1 ){ 
 
@@ -31,9 +40,9 @@ int gameLoop(Game* game, Sprite* sprite){
         // Always happens
         if(sprite->monki_created == 1){
             updateSprite(game, sprite);
+            renderSprite(game, sprite);
         }
 
-        renderSprite(game, sprite);
         
         SDL_RenderPresent(game->render);
     }

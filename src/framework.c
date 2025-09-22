@@ -50,6 +50,7 @@ int placeSprite(Game* game, Sprite* sprite){
     return 0;
 }
 
+// This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
 void moveSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
         game->mouse.bpress = 1; // button down!!!!
@@ -58,7 +59,7 @@ void moveSprite(Game* game, Sprite* sprite){
         game->mouse.bpress = 0; // button up!
 }
 
-// This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
+// continuously update the sprite!
 int updateSprite(Game* game, Sprite* sprite){
     // Get the distance between the mouse click and the sprite
     if(game->mouse.bpress == 1){
