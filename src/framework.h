@@ -54,7 +54,7 @@ void moveSprite(Game* game, Sprite* sprite);
 
 int updateSprite(Game* game, Sprite* sprite);
 
-int renderSprite(Game* game);
+int renderSprite(Game* game, Sprite* sprite);
 
 void destroySprite(Sprite* sprite);
 

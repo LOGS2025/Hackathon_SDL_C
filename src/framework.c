@@ -52,19 +52,20 @@ int placeSprite(Game* game, Sprite* sprite){
 
 void moveSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
-        sprite->position.posY = game->mouse.posm_y;
-        sprite->position.posX = game->mouse.posm_x;
-        printf("Button down pressed\n");
+        game->mouse.bpress = 1; // button down!!!!
     }
-}
-
-void pickSprite(Game* game, Sprite* sprite){
-
+    if(game->e.type == SDL_MOUSEBUTTONUP)
+        game->mouse.bpress = 0; // button up!
 }
 
 // This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
 int updateSprite(Game* game, Sprite* sprite){
     // Get the distance between the mouse click and the sprite
+    if(game->mouse.bpress == 1){
+        sprite->dest.x = game->mouse.posm_x;
+        sprite->dest.y = game->mouse.posm_y;
+    }
+    
     if(sprite->position.posX - sprite->dest.x != 0)
     // Move so the difference is set to zero
         if(sprite->dest.x < sprite->position.posX)
@@ -78,14 +79,13 @@ int updateSprite(Game* game, Sprite* sprite){
         else if(sprite->dest.y > sprite->position.posY)
             sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y))/60);
 
-
-    if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
-    printf("Couldnt render copy\n");
     return 0;
 }
 
-int renderSprite(Game* game){
-    SDL_RenderPresent(game->render);
+int renderSprite(Game* game, Sprite* sprite){
+    if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
+    printf("Couldnt render copy\n");
+    return 0;
 }
 
 void destroySprite(Sprite* sprite){

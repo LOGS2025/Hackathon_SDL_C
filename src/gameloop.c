@@ -11,12 +11,14 @@ int gameLoop(Game* game, Sprite* sprite){
     while( game->running == 1 ){ 
 
         SDL_RenderClear(game->render);
-        SDL_Delay(20);
-        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
 
+        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
+        
+        SDL_Delay(20);
+        
         while( SDL_PollEvent( &game->e ) ){ 
             if( game->e.type == SDL_QUIT )  
-                game->running = 0;       
+            game->running = 0;       
             // Happpen conditionally
             if(game->pkeys[SDL_SCANCODE_1] && sprite->monki_created == 0){ // Only works once
                 game->mouse.bpress = 1;
@@ -30,7 +32,10 @@ int gameLoop(Game* game, Sprite* sprite){
         if(sprite->monki_created == 1){
             updateSprite(game, sprite);
         }
-        renderSprite(game);
+
+        renderSprite(game, sprite);
+        
+        SDL_RenderPresent(game->render);
     }
     destroySprite(sprite);
 }
@@ -100,7 +105,7 @@ int init(Game* game, int win_h, int win_w){
 int main(int argc, char* argv[]){
     
     Game game; 
-    Sprite monito = {.monki_created = 0};
+    Sprite monito = {.monki_created = 0, .dest.x = 0, .dest.y = 0};
 
     int x = 80; // Origin from where to cut rect_src
     int y = 40;
