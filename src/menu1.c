@@ -1,3 +1,8 @@
 #include "menu1.h"
 
-int loadMenu
+void init_mapview(){
+
+}
+
+
+

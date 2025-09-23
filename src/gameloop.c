@@ -42,11 +42,8 @@ int gameLoop(Game* game, Sprite* sprite){
             updateSprite(game, sprite);
             renderSprite(game, sprite);
         }
-
-        
         SDL_RenderPresent(game->render);
     }
-    destroySprite(sprite);
 }
 
 int close(Game* game)
@@ -111,6 +108,9 @@ int init(Game* game, int win_h, int win_w){
         }
         
 
+
+
+
 int main(int argc, char* argv[]){
     
     Game game; 
@@ -127,6 +127,8 @@ int main(int argc, char* argv[]){
     createSprite(&game, &monito, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
 
     gameLoop(&game, &monito);
+
+    destroySprite(&monito);
 
     close(&game);           
 
