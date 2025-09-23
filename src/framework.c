@@ -62,24 +62,32 @@ void moveSprite(Game* game, Sprite* sprite){
 // continuously update the sprite!
 int updateSprite(Game* game, Sprite* sprite){
     // Get the distance between the mouse click and the sprite
-    if(game->mouse.bpress == 1){
+    if(game->mouse.bpress == 1
+    && game->mouse.posm_x >= sprite->dest.x 
+    && game->mouse.posm_x < sprite->dest.x + 40
+    && game->mouse.posm_y >= sprite->dest.y 
+    && game->mouse.posm_y < sprite->dest.y + 40
+    ){
         sprite->dest.x = game->mouse.posm_x;
         sprite->dest.y = game->mouse.posm_y;
     }
-    
+    else if(game->mouse.bpress == 1){
+    sprite->position.posX = game->mouse.posm_x;
+    sprite->position.posY = game->mouse.posm_y;
+    }
     if(sprite->position.posX - sprite->dest.x != 0)
     // Move so the difference is set to zero
         if(sprite->dest.x < sprite->position.posX)
-            sprite->dest.x += (int)((abs(sprite->position.posX - sprite->dest.x))/60);
+            sprite->dest.x += (int)((abs(sprite->position.posX - sprite->dest.x)))
+;
         else if(sprite->dest.x > sprite->position.posX)
-            sprite->dest.x -= (int)((abs(sprite->position.posX - sprite->dest.x))/60);
+            sprite->dest.x -= (int)((abs(sprite->position.posX - sprite->dest.x)));
             
     if(sprite->position.posY - sprite->dest.y != 0)
         if(sprite->dest.y < sprite->position.posY) 
-            sprite->dest.y += (int)((abs(sprite->position.posY - sprite->dest.y))/60);
+            sprite->dest.y += (int)((abs(sprite->position.posY - sprite->dest.y)));
         else if(sprite->dest.y > sprite->position.posY)
-            sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y))/60);
-
+            sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y)));
     return 0;
 }
 
