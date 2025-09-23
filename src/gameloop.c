@@ -3,7 +3,7 @@ gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
 */
 /*
     Compile all:
-gcc framework.o gameloop.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image 
+gcc ofiles/framework.o ofiles/gameloop.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image 
 -lSDL2_ttf
 */
 #include "gameloop.h"
@@ -42,11 +42,8 @@ int gameLoop(Game* game, Sprite* sprite){
             updateSprite(game, sprite);
             renderSprite(game, sprite);
         }
-
-        
         SDL_RenderPresent(game->render);
     }
-    destroySprite(sprite);
 }
 
 int close(Game* game)
@@ -111,6 +108,9 @@ int init(Game* game, int win_h, int win_w){
         }
         
 
+
+
+
 int main(int argc, char* argv[]){
     
     Game game; 
@@ -125,9 +125,10 @@ int main(int argc, char* argv[]){
     printf("Game running = %i\n", game.running);
 
     createSprite(&game, &monito, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
-    printf("Cprite created!!!\n");
 
     gameLoop(&game, &monito);
+
+    destroySprite(&monito);
 
     close(&game);           
 

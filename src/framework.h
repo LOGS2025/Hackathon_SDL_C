@@ -18,6 +18,12 @@ typedef struct Mouse{
     int bpress;
 }Mouse;
 
+typedef struct GameState{
+    void (*handle_events)(struct Game* game);
+    void (*update)(struct Game* game);
+    void (*render)(struct Game* game);
+}Gamestate;
+
 typedef struct Game{
     SDL_Renderer* render;
     SDL_Window* ventana;
@@ -28,6 +34,8 @@ typedef struct Game{
     int running;
 
     const Uint8* pkeys;
+
+    Gamestate* current_state;
 
 }Game;
 
