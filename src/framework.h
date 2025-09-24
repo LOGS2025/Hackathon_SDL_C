@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+
 typedef struct Vector2D{
     int posX;
     int posY;
@@ -19,24 +20,26 @@ typedef struct Mouse{
 }Mouse;
 
 typedef struct GameState{
-    void (*handle_events)(struct Game* game);
-    void (*update)(struct Game* game);
-    void (*render)(struct Game* game);
+    void (*handle_events)(struct Game* game, Sprite* sprite);
+    void (*update)(struct Game* game, Sprite* sprite);
+    void (*render)(struct Game* game, Sprite* sprite);
 }Gamestate;
 
 typedef struct Game{
     SDL_Renderer* render;
     SDL_Window* ventana;
     SDL_Event e;
-
+    
     Mouse mouse;
-
+    
     int running;
-
+    
     const Uint8* pkeys;
-
+    
     Gamestate* current_state;
 }Game;
+
+
 
 typedef struct Sprite{
     SDL_Surface* surface;
@@ -44,12 +47,12 @@ typedef struct Sprite{
     
     SDL_Rect src;
     SDL_Rect dest;
-
+    
     Vector2D position;
     char* nombre;
     int prop1;
     int monki_created;
-
+    
 }Sprite;
 
 
@@ -60,6 +63,8 @@ int placeSprite(Game* game, Sprite* sprite);
 void moveSprite(Game* game, Sprite* sprite);
 
 int updateSprite(Game* game, Sprite* sprite);
+
+void handle_eventsSprite(Game* game, Sprite* sprite);
 
 int renderSprite(Game* game, Sprite* sprite);
 

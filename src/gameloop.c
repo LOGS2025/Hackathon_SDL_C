@@ -25,31 +25,30 @@ int gameLoop(Game* game, Sprite* sprite, UI* ui){
         
         SDL_Delay(20);
         
-        while( SDL_PollEvent( &game->e ) ){ 
-            if( game->e.type == SDL_QUIT )  
-            game->running = 0;       
-            // Happpen conditionally
-            if(game->pkeys[SDL_SCANCODE_1] && sprite->monki_created == 0){ // Only works once
-                game->mouse.bpress = 1;
-            }
-            if(game->mouse.bpress==1 && sprite->monki_created == 0){
-                placeSprite(game, sprite);
-            }
-            moveSprite(game, sprite);            
-        } 
+        game->current_state->handle_events(game, sprite);
         // Always happens
-        if(sprite->monki_created == 1){
-            updateSprite(game, sprite);
-            renderSprite(game, sprite);
-        }
-
-        render_fondo(game, &ui->fondo);
-        render_texto(game, &ui->pausa);
-        render_texto(game, &ui->resume);
+        game->current_state->update(game, sprite);
+        game->current_state->render(game, sprite);
 
         SDL_RenderPresent(game->render);
     }
 }
+/*int estados(Game* game){
+    game->pkeys = SDL_GetKeyboardState(NULL);
+    Gamestate* pausa;
+
+    if (game->pkeys[SDL_SCANCODE_ESCAPE]){
+        game->current_state->handle_events = pausa;
+    }
+    if (game->pkeys[SDL_SCANCODE_M]){
+        game->current_state->handle_events = mapa;
+    }
+    if (game->pkeys[SDL_SCANCODE_]){
+        game->current_state->handle_events = mapa;
+    }
+
+}*/
+
 
 int gameMenu(Game* game, UI* ui){
     while( game->running == 1 ){ 
@@ -137,7 +136,13 @@ int main(int argc, char* argv[]){
     int y = 40;
     int w = 600 - x; // Dimensions of rect_src
     int h = 500 - y;
-
+    
+    Gamestate estado_pausa = {};
+    Gamestate estado_mapa = {};
+    Gamestate estado_juego = { handle_eventsSprite(&game, &monito), updateSprite(&game, &monito), renderSprite(&game, &monito)};  // estado normal de juego
+    Gamestate estado_inventario;  // para el ejemplo de 'i'
+    
+    
     init(&game, 600,800);
     printf("Game running = %i\n", game.running);
 

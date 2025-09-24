@@ -31,6 +31,7 @@ int createSprite(Game* game, Sprite* sprite, int x, int y, int src_w, int src_h,
     return 0;
 }
 
+
 // Once we created a sprite, we need so be able to place it
 int placeSprite(Game* game, Sprite* sprite){
     if(game->e.type == SDL_MOUSEBUTTONDOWN){
@@ -43,7 +44,7 @@ int placeSprite(Game* game, Sprite* sprite){
         // Save where the sprite is when spawned
         sprite->position.posX = (game->mouse.posm_x); 
         sprite->position.posY = (game->mouse.posm_y); 
-
+        
         game->mouse.bpress = 0; // reset flag
         sprite->monki_created = 1; // allows to spawn texture
     }
@@ -56,44 +57,63 @@ void moveSprite(Game* game, Sprite* sprite){
         game->mouse.bpress = 1; // button down!!!!
     }
     if(game->e.type == SDL_MOUSEBUTTONUP)
-        game->mouse.bpress = 0; // button up!
+    game->mouse.bpress = 0; // button up!
+}
+
+void handle_eventsSprite(Game* game, Sprite* sprite){
+        while( SDL_PollEvent( &game->e ) ){ 
+            if( game->e.type == SDL_QUIT )  
+            game->running = 0;       
+            // Happpen conditionally
+            if(game->pkeys[SDL_SCANCODE_1] && sprite->monki_created == 0){ // Only works once
+                game->mouse.bpress = 1;
+            }
+            if(game->mouse.bpress==1 && sprite->monki_created == 0){
+                placeSprite(game, sprite);
+            }
+            moveSprite(game, sprite);            
+        } 
 }
 
 // continuously update the sprite!
 int updateSprite(Game* game, Sprite* sprite){
-    // Get the distance between the mouse click and the sprite
-    if(game->mouse.bpress == 1
-    && game->mouse.posm_x >= sprite->dest.x 
-    && game->mouse.posm_x < sprite->dest.x + 40
-    && game->mouse.posm_y >= sprite->dest.y 
-    && game->mouse.posm_y < sprite->dest.y + 40
+    if(sprite->monki_created == 1){
+        // Get the distance between the mouse click and the sprite
+        if(game->mouse.bpress == 1
+            && game->mouse.posm_x >= sprite->dest.x 
+        && game->mouse.posm_x < sprite->dest.x + 40
+        && game->mouse.posm_y >= sprite->dest.y 
+        && game->mouse.posm_y < sprite->dest.y + 40
     ){
         sprite->dest.x = game->mouse.posm_x;
-        sprite->dest.y = game->mouse.posm_y;
+            sprite->dest.y = game->mouse.posm_y;
+        }
+        else if(game->mouse.bpress == 1){
+        sprite->position.posX = game->mouse.posm_x;
+        sprite->position.posY = game->mouse.posm_y;
+        }
+        if(sprite->position.posX - sprite->dest.x != 0)
+        // Move so the difference is set to zero
+            if(sprite->dest.x < sprite->position.posX)
+                sprite->dest.x += (int)((abs(sprite->position.posX - sprite->dest.x)))
+    ;
+            else if(sprite->dest.x > sprite->position.posX)
+                sprite->dest.x -= (int)((abs(sprite->position.posX - sprite->dest.x)));
+                
+        if(sprite->position.posY - sprite->dest.y != 0)
+            if(sprite->dest.y < sprite->position.posY) 
+                sprite->dest.y += (int)((abs(sprite->position.posY - sprite->dest.y)));
+            else if(sprite->dest.y > sprite->position.posY)
+                sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y)));
+        return 0;
     }
-    else if(game->mouse.bpress == 1){
-    sprite->position.posX = game->mouse.posm_x;
-    sprite->position.posY = game->mouse.posm_y;
-    }
-    if(sprite->position.posX - sprite->dest.x != 0)
-    // Move so the difference is set to zero
-        if(sprite->dest.x < sprite->position.posX)
-            sprite->dest.x += (int)((abs(sprite->position.posX - sprite->dest.x)))
-;
-        else if(sprite->dest.x > sprite->position.posX)
-            sprite->dest.x -= (int)((abs(sprite->position.posX - sprite->dest.x)));
-            
-    if(sprite->position.posY - sprite->dest.y != 0)
-        if(sprite->dest.y < sprite->position.posY) 
-            sprite->dest.y += (int)((abs(sprite->position.posY - sprite->dest.y)));
-        else if(sprite->dest.y > sprite->position.posY)
-            sprite->dest.y -= (int)((abs(sprite->position.posY - sprite->dest.y)));
-    return 0;
 }
 
 int renderSprite(Game* game, Sprite* sprite){
+    if(sprite->monki_created == 1){
     if(SDL_RenderCopy(game->render, sprite->texture, &sprite->src, &sprite->dest)!=0)
     printf("Couldnt render copy\n");
+    }
     return 0;
 }
 
