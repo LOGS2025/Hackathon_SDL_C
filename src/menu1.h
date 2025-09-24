@@ -2,34 +2,53 @@
 #define MENU1_H
 
 #include "framework.h"
+#include "SDL2/SDL_ttf.h"
 
 typedef struct Texto{
     SDL_Rect rect;
     SDL_Surface* surface;
     SDL_Texture* texture;
+    SDL_Color color;
+    char str_buffer[60];
+    char str_num[10];
+    char* msg;
+    TTF_Font* font;
 }Texto;
 
 typedef struct Tilemap{
 
 }Tilemap;
 
-typedef struct Fondo{
+typedef struct Imagen{
     SDL_Texture* texture;
     SDL_Surface* surface;
     char* filepath;
-}Fondo;
+    SDL_Rect src_rect;
+}Imagen;
 
 typedef struct UI{
     Texto pausa;
     Texto otra_cosa;
     Texto salir;
     Texto resume;
-    Fondo fondo;
+    Imagen fondo;
 }UI;
 
 typedef struct MapView{
     Tilemap tilemap;
     UI ui_1;
 }MapView;
+
+int load_texto(Game* game, Texto* texto, int x, int y, int h, int w);
+
+void create_image(Imagen* image, char* filepath);
+
+int init_TTF(Texto* texto, char* filepath);
+
+int load_image(Game* game, Imagen* image, int transparency);
+
+int render_fondo(Game* game, Imagen* image);
+
+int render_texto(Game* game, Texto* texto);
 
 #endif
