@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "framework.h"
+#include "menu1.h"
 
 typedef struct Game Game;
 
@@ -11,7 +12,7 @@ typedef struct Vector2D Vector2D;
 
 typedef struct Mouse Mouse;
 
-int gameLoop(Game* game, Sprite* sprite);
+int gameLoop(Game* game, Sprite* sprite, UI* ui);
 
 int close(Game* game);
 

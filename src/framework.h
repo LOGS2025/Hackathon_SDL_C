@@ -36,7 +36,6 @@ typedef struct Game{
     const Uint8* pkeys;
 
     Gamestate* current_state;
-
 }Game;
 
 typedef struct Sprite{
