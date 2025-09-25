@@ -32,7 +32,7 @@ int gameLoop(Game* game, GameState* gamestate){
                 game->current_state = &gamestate[0];
                 game->stateFlag = 0;
             }
-            SDL_Delay(50);
+            SDL_Delay(100);
         }
         game->current_state->handle_events(game);
         game->current_state->update(game);

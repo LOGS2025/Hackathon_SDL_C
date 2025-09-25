@@ -46,6 +46,7 @@ int placeSprite(Game* game){
         
         game->mouse.bpress = 0; // reset flag
         game->monki->monki_created = 1; // allows to spawn texture
+        SDL_Delay(200);
     }
     return 0;
 }
