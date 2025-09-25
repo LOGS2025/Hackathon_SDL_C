@@ -38,6 +38,7 @@ typedef struct Game{
 
     // Game pauseState struct
     UI* pause;
+    UI* mapa;
     
     GameState* current_state;
 }Game;

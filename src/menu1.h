@@ -62,4 +62,6 @@ void handle_eventsPausa(Game* game);
 
 void init_Pausa(Game* game);
 
+void destroyFont(TTF_Font* font);
+
 #endif

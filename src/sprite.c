@@ -51,15 +51,7 @@ int placeSprite(Game* game){
     return 0;
 }
 
-// This function goes inside handleEvents() and must have the logic to accept all the input it needs to execute actions
-void moveSprite(Game* game){
-    if(game->e.type == SDL_MOUSEBUTTONDOWN){
-        game->mouse.bpress = 1; // button down!!!!
-    }
-    if(game->e.type == SDL_MOUSEBUTTONUP)
-    game->mouse.bpress = 0; // button up!
-}
-
+// This function must have the logic to accept all the input it needs to execute actions
 void handle_eventsSprite(Game* game){
     while( SDL_PollEvent( &game->e ) ){ 
         if( game->e.type == SDL_QUIT )  
@@ -71,7 +63,11 @@ void handle_eventsSprite(Game* game){
         if(game->mouse.bpress==1 && game->monki->monki_created == 0){
             placeSprite(game);
         }
-        moveSprite(game);            
+        if(game->e.type == SDL_MOUSEBUTTONDOWN){
+            game->mouse.bpress = 1; // button down!!!!
+        }
+        if(game->e.type == SDL_MOUSEBUTTONUP)
+        game->mouse.bpress = 0; // button up!         
     } 
 }
 

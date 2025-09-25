@@ -8,6 +8,7 @@ gcc ofiles/framework.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64
 #include "gameloop.h"
 #include "sprite.h"
 #include "menu1.h"
+#include "viewEvents.h"
 
 int gameLoop(Game* game, GameState* gamestate){
     // Happen once
@@ -42,10 +43,8 @@ int gameLoop(Game* game, GameState* gamestate){
     }
 }
 
-int close(Game* game)
-{
-    //TTF_CloseFont(game->font);
-    //TTF_Quit();
+int close(Game* game){
+    TTF_Quit();
     SDL_DestroyRenderer(game->render);
     SDL_DestroyWindow(game->ventana);
     SDL_Quit();
@@ -147,6 +146,8 @@ int main(int argc, char* argv[]){
         gameLoop(&game, gamestates);
         
         destroySprite(game.monki);
+        destroyFont(game.pause->pausa.font);
+        destroyFont(game.pause->resume.font);
         
         close(&game);           
     }

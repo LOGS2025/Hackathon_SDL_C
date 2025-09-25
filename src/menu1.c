@@ -118,3 +118,7 @@ void init_Pausa(Game* game){
 
     load_image(game, &game->pause->fondo, 50);
 }
+
+void destroyFont(TTF_Font* font){
+    TTF_CloseFont(font);
+}
