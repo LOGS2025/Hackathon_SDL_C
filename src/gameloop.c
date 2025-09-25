@@ -6,17 +6,15 @@ gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
 gcc ofiles/framework.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 */
 #include "gameloop.h"
-#include "framework.h"
+#include "sprite.h"
 #include "menu1.h"
 
-int gameLoop(Game* game, Sprite* sprite, UI* ui){
+int gameLoop(Game* game, GameState* gamestate){
     // Happen once
     game->pkeys = SDL_GetKeyboardState(NULL);
 
-    //SDL_SetRenderDrawColor(game->render, 255, 255, 255, 255);
-
-    SDL_RenderPresent(game->render);
-
+    SDL_SetRenderDrawColor(game->render, 255, 255, 255, 255);
+    
     while( game->running == 1 ){
 
         SDL_RenderClear(game->render);
@@ -25,50 +23,15 @@ int gameLoop(Game* game, Sprite* sprite, UI* ui){
         
         SDL_Delay(20);
         
-        game->current_state->handle_events(game, sprite);
-        // Always happens
-        game->current_state->update(game, sprite);
-        game->current_state->render(game, sprite);
+        if(game->pkeys[SDL_SCANCODE_M]){
+            game->current_state = &gamestate[1];
+        }
+        game->current_state->handle_events(game);
+        game->current_state->update(game);
+        game->current_state->render(game);
 
         SDL_RenderPresent(game->render);
     }
-}
-/*int estados(Game* game){
-    game->pkeys = SDL_GetKeyboardState(NULL);
-    Gamestate* pausa;
-
-    if (game->pkeys[SDL_SCANCODE_ESCAPE]){
-        game->current_state->handle_events = pausa;
-    }
-    if (game->pkeys[SDL_SCANCODE_M]){
-        game->current_state->handle_events = mapa;
-    }
-    if (game->pkeys[SDL_SCANCODE_]){
-        game->current_state->handle_events = mapa;
-    }
-
-}*/
-
-
-int gameMenu(Game* game, UI* ui){
-    while( game->running == 1 ){ 
-        SDL_RenderClear(game->render);
-
-        SDL_GetMouseState(&game->mouse.posm_x,&game->mouse.posm_y);
-
-        SDL_Delay(20);
-        
-        while( SDL_PollEvent( &game->e ) ){ 
-            if( game->e.type == SDL_QUIT )  
-            game->running = 0;             
-        } 
-
-        render_fondo(game, &ui->fondo);
-        render_texto(game, &ui->pausa);
-
-        SDL_RenderPresent(game->render);
-    }
-    return 0;
 }
 
 int close(Game* game)
@@ -124,52 +87,61 @@ int init(Game* game, int win_h, int win_w){
     
     return 0;
 }
-        
-
 
 int main(int argc, char* argv[]){
-    Game game; 
-    Sprite monito = {.monki_created = 0, .dest.x = 0, .dest.y = 0};
-    UI ui_1 = {.pausa = {.msg = "Pausa"},.resume = {.msg = "Resumir"}};
+
+    Game game;
+
+    Sprite monki = { .monki_created = 0, .dest.x = 0, .dest.y = 0};
+
+    UI pause = {.pausa = {.msg = "Pausa"},.resume = {.msg = "Resumir"}};
+
+    game.monki = &monki;
+    game.pause = &pause;
+    game.stateFlag = 0;
 
     int x = 80; // Origin from where to cut rect_src
     int y = 40;
     int w = 600 - x; // Dimensions of rect_src
     int h = 500 - y;
     
-    Gamestate estado_pausa = {};
-    Gamestate estado_mapa = {};
-    Gamestate estado_juego = { handle_eventsSprite(&game, &monito), updateSprite(&game, &monito), renderSprite(&game, &monito)};  // estado normal de juego
-    Gamestate estado_inventario;  // para el ejemplo de 'i'
+    printf("Created game and monito\n");
     
     
-    init(&game, 600,800);
-    printf("Game running = %i\n", game.running);
+    GameState juegoState= { 
+        .handle_events = handle_eventsSprite, 
+        .update = updateSprite, 
+        .render = renderSprite
+    };
 
-    init_TTF(&ui_1.pausa, "assets/comic.ttf");
+    GameState pausaState= { 
+        .handle_events = handle_eventsPausa, 
+        .update = updatePausa, 
+        .render = renderPausa
+    };
+    
+    GameState gamestates[] = {juegoState, pausaState};
+    
+    game.current_state = &juegoState;
 
-    init_TTF(&ui_1.resume, "assets/comic.ttf");
+    printf("Created gamestate\n");
+    
+    if(init(&game, 600,800)!=0)
+        return 1;
+    else
+    {
+        printf("Game running = %i\n", game.running); 
 
-    load_texto(&game, &ui_1.pausa, 0, 0, 100 ,200);
+        createSprite(&game, game.monki, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
+        
+        init_Pausa(&game);
 
-    load_texto(&game, &ui_1.resume, 0, 110, 100 ,400);
-
-    create_image(&ui_1.fondo,"assets/monki.jpg");
-
-    load_image(&game, &ui_1.fondo, 50);
-    
-    // Happen once
-    game.pkeys = SDL_GetKeyboardState(NULL);
-    
-    //SDL_SetRenderDrawColor(game->render, 255, 255, 255, 255);
-    
-    createSprite(&game, &monito, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
-    
-    gameLoop(&game, &monito, &ui_1);
-    
-    destroySprite(&monito);
-    
-    close(&game);           
+        gameLoop(&game, gamestates);
+        
+        destroySprite(game.monki);
+        
+        close(&game);           
+    }
 
     return 0;
 }

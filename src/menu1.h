@@ -1,8 +1,11 @@
 #ifndef MENU1_H
 #define MENU1_H
 
-#include "framework.h"
 #include "SDL2/SDL_ttf.h"
+#include "sprite.h"
+#include "gameloop.h"
+
+typedef struct Game Game;
 
 typedef struct Texto{
     SDL_Rect rect;
@@ -50,5 +53,13 @@ int load_image(Game* game, Imagen* image, int transparency);
 int render_fondo(Game* game, Imagen* image);
 
 int render_texto(Game* game, Texto* texto);
+
+int renderPausa(Game* game);
+
+int updatePausa(Game* game);
+
+void handle_eventsPausa(Game* game);
+
+void init_Pausa(Game* game);
 
 #endif
