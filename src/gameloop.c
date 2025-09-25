@@ -24,7 +24,15 @@ int gameLoop(Game* game, GameState* gamestate){
         SDL_Delay(20);
         
         if(game->pkeys[SDL_SCANCODE_M]){
-            game->current_state = &gamestate[1];
+            if(game->stateFlag == 0){
+                game->current_state = &gamestate[1];
+                game->stateFlag = 1;
+            }
+            else if(game->stateFlag == 1){
+                game->current_state = &gamestate[0];
+                game->stateFlag = 0;
+            }
+            SDL_Delay(50);
         }
         game->current_state->handle_events(game);
         game->current_state->update(game);
