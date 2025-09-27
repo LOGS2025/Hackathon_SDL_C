@@ -3,12 +3,13 @@ gcc -c src/gameloop.c -o ofiles/gameloop.o -IC:/msys64/ucrt64/include/SDL2
 */
 /*
     Compile all:
-gcc ofiles/framework.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+gcc ofiles/sprite.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64/ucrt64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 */
 #include "gameloop.h"
 #include "sprite.h"
 #include "menu1.h"
 #include "viewEvents.h"
+#include "config.h"
 
 int gameLoop(Game* game, GameState* gamestate){
     // Happen once
@@ -133,13 +134,13 @@ int main(int argc, char* argv[]){
 
     printf("Created gamestate\n");
     
-    if(init(&game, 600,800)!=0)
+    if(init(&game, WINDOW_H,WINDOW_W)!=0)
         return 1;
     else
     {
         printf("Game running = %i\n", game.running); 
 
-        createSprite(&game, game.monki, x,y, w, h, "Charly", 5, "assets/monki.jpg", h/10, w/10);
+        createSprite(&game, game.monki, x,y, w, h, "Charly", "assets/monki.jpg", 1);
         
         init_Pausa(&game);
 

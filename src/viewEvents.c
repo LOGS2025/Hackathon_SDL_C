@@ -5,7 +5,5 @@ This file compiles
 */
 
 #include "viewEvents.h"
+#include "sprite.h"
 
-int zoomOut(){
-
-}
