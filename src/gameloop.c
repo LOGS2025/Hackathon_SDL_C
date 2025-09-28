@@ -8,7 +8,6 @@ gcc ofiles/sprite.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64/uc
 #include "gameloop.h"
 #include "sprite.h"
 #include "menu1.h"
-#include "viewEvents.h"
 #include "config.h"
 
 int gameLoop(Game* game, GameState* gamestate){

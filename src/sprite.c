@@ -37,20 +37,18 @@ int createSprite(Game* game, Sprite* monki, int x, int y, int src_w, int src_h, 
 
 // Once we created a monki, we need so be able to place it
 int placeSprite(Game* game){
-    if(game->e.type == SDL_MOUSEBUTTONDOWN){
-        game->monki->dest.x = (WINDOW_W/2) - (game->monki->dest.w + (game->monki->dest.w)/2); 
-        game->monki->dest.y = (WINDOW_H/2) + (game->monki->dest.h + (game->monki->dest.h)/2); // Spawn at center
+    game->monki->dest.x = (WINDOW_W/2) - (game->monki->dest.w + (game->monki->dest.w)/2); 
+    game->monki->dest.y = (WINDOW_H/2) + (game->monki->dest.h + (game->monki->dest.h)/2); // Spawn at center
 
-        // Save where the monki is when spawned
-        game->monki->position.posX = (WINDOW_W/2); 
-        game->monki->position.posY = (WINDOW_H/2); 
-        
-        game->mouse.bpress = 0; // reset flag
-        game->monki->monki_created = 1; // allows to spawn one texture per sprite
+    // Save where the monki is when spawned
+    game->monki->position.posX = (WINDOW_W/2); 
+    game->monki->position.posY = (WINDOW_H/2); 
+    
+    game->mouse.bpress = 0; // reset flag
+    game->monki->monki_created = 1; // allows to spawn one texture per sprite
 
-        printf("Sprite placed\n");
-        SDL_Delay(200);
-    }
+    printf("Sprite placed\n");
+    SDL_Delay(200);
     return 0;
 }
 
@@ -71,66 +69,71 @@ void handle_eventsSprite(Game* game){
 
 // continuously update the monki!
 int updateSprite(Game* game){
+        //game->monki->position.distX = (abs(game->monki->position.posX - game->monki->dest.x));
+        //game->monki->position.distY = (abs(game->monki->position.posY - game->monki->dest.y));
     if(game->monki->monki_created == 1 && game->mouse.bpress == 1){
-        //pickSprite(game);
         game->monki->position.posX = game->mouse.posm_x;
         game->monki->position.posY = game->mouse.posm_y;
     }
+    checkMouse(game);
     clickSprite(game);
     resizeSprite(game->monki);
     return 0;
 }
 
+    // The function is only made for window height / 2, recalculate for another value
 void resizeSprite(Sprite* sprite){
     // If going down -> get bigger
-    if(sprite->dest.y <= WINDOW_H){ // Only changes size below WINDOW_HEIGHT
+    if(sprite->dest.y >= WINDOW_H/2){ // Only changes size below WINDOW_HEIGHT
         sprite->proportion = (2.0f/225.0f)*(float)sprite->dest.y - (7.0f/3.0f); // Proportion as a function of Y_position
     }
     else    
-        sprite->proportion = 1;
-    sprite->dest.h = 46*(sprite->proportion);
-    sprite->dest.w = 52*(sprite->proportion);
+        sprite->proportion = 1.0f/3.0f;
+    sprite->dest.h = 46*3*(sprite->proportion);
+    sprite->dest.w = 52*3*(sprite->proportion);
 }
 
-// SPRITE IS PICKED UP BY MOUSE
-void pickSprite(Game* game){
- if(game->mouse.posm_x >= game->monki->dest.x 
- && game->mouse.posm_x < game->monki->dest.x + 40
- && game->mouse.posm_y >= game->monki->dest.y 
- && game->mouse.posm_y < game->monki->dest.y + 40
+// Mouse over sprite flag check
+void checkMouse(Game* game){ // Move sprite to mouse
+    if(game->mouse.posm_x >= game->monki->dest.x 
+    && game->mouse.posm_x < game->monki->dest.x + game->monki->dest.w
+    && game->mouse.posm_y >= game->monki->dest.y 
+    && game->mouse.posm_y < game->monki->dest.y + game->monki->dest.h
     ){
-        game->monki->dest.x = game->mouse.posm_x;
-        game->monki->dest.y = game->mouse.posm_y;
+        game->monki->mouseOverSprite = 1;
+    }
+    else{ // Get mouse click if not
+        game->monki->mouseOverSprite = 0;
     }
 }
 
-// SPRITE IS ONLY MOVING TO TOWARD THE CLICK
+// Act upon sprite correpsoningly to checkMouse() flag
 void clickSprite(Game* game){
-    game->monki->movingX = 0;
-    game->monki->movingY = 0;
-    if(game->monki->position.posX - (game->monki->dest.x + (game->monki->dest.w)/2) != 0){
-    // Move so the difference is set to zero
-        if((game->monki->dest.x + (game->monki->dest.w)/2) < game->monki->position.posX){
-            game->monki->dest.x += 2;
-            game->monki->movingX = 1; // Moving right flag
-        } else if((game->monki->dest.x + (game->monki->dest.w)/2) > game->monki->position.posX){
-            game->monki->dest.x -= 2;
-            game->monki->movingX = -1; // Moving left flag
+    if(game->monki->mouseOverSprite == 1 && game->mouse.bpress == 1){
+        game->monki->dest.x = game->mouse.posm_x - (game->monki->dest.w)/2;
+        game->monki->dest.y = game->mouse.posm_y - (game->monki->dest.h)/2;
+    }
+    else if(game->mouse.bpress == 0){
+        if(game->monki->position.posX - (game->monki->dest.x + (game->monki->dest.w)/2) != 0){
+            // When difference is greater than 10
+            if((game->monki->dest.x + (game->monki->dest.w)/2) < game->monki->position.posX){
+                game->monki->dest.x += 500/60.0f;
+            } else if((game->monki->dest.x + (game->monki->dest.w)/2) > game->monki->position.posX){
+                game->monki->dest.x -= 500/60.0f;
+            }
         }
-    if(game->monki->position.posY - (game->monki->dest.y + (game->monki->dest.h)/2) != 0)
-        if((game->monki->dest.y + (game->monki->dest.h)/2) < game->monki->position.posY){
-            game->monki->dest.y += 2;       
-            game->monki->movingY = -1; // Moving down flag
-        } else if((game->monki->dest.y + (game->monki->dest.h)/2) > game->monki->position.posY){
-        //&& game->monki->dest.y > WINDOW_H/2){ // Restrict upward movement above te horizon line
-            game->monki->dest.y -= 2;
-            game->monki->movingY = 1; // Moving up flag
+        if(game->monki->position.posY - (game->monki->dest.y + (game->monki->dest.h)/2) != 0){
+            if((game->monki->dest.y + (game->monki->dest.h)/2) < game->monki->position.posY){
+                game->monki->dest.y += 500/60.0f;       
+            } else if((game->monki->dest.y + (game->monki->dest.h)/2) > game->monki->position.posY){
+                game->monki->dest.y -= 500/60.0f;
+            }
         }
     }
 }
 // Distance
-//(int)((abs(game->monki->position.posX - game->monki->dest.x)))
-//(int)((abs(game->monki->position.posY - game->monki->dest.y)))
+//(abs(game->monki->position.posX - game->monki->dest.x))
+//(abs(game->monki->position.posY - game->monki->dest.y))
 
 int renderSprite(Game* game){
     if(game->monki->monki_created == 1){

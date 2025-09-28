@@ -30,10 +30,7 @@ typedef struct Sprite{
     char* nombre;
     float proportion;
     int monki_created;
-
-    // movement
-    int movingY;
-    int movingX;
+    int mouseOverSprite;
 
 }Sprite;
 
@@ -51,7 +48,7 @@ void destroySprite(Sprite* monki);
 
 void resizeSprite(Sprite* sprite);
 
-void pickSprite(Game* game);
+void checkMouse(Game* game);
 
 void clickSprite(Game* game);
 
