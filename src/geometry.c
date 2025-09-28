@@ -14,22 +14,22 @@ This file compiles
 
 #include "geometry.h"
 
-void drawLine(){
+void handleEventsDraw(){
+    
+}
+
+void updateDraw(){
 
 }
 
-void drawPoint(){
+void renderDraw(){
+
+}
+
+void destroyDraw(){
 
 }
 
 void erase(){
-
-}
-
-void drawRectangle(){
-
-}
-
-void draw(){
 
 }
