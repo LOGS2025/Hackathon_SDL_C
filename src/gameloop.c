@@ -9,6 +9,7 @@ gcc ofiles/sprite.o ofiles/gameloop.o ofiles/menu1.o -o Monki.exe -LC:/msys64/uc
 #include "sprite.h"
 #include "menu1.h"
 #include "config.h"
+#include "geometry.h"
 
 int gameLoop(Game* game, GameState* gamestate){
     // Happen once
@@ -33,6 +34,21 @@ int gameLoop(Game* game, GameState* gamestate){
                 game->current_state = &gamestate[0];
                 game->stateFlag = 0;
             }
+            SDL_Delay(100);
+        }
+        //Dibujar
+        if(game->pkeys[SDL_SCANCODE_D]){
+            if(game->stateFlag != 2){ 
+                game->current_state = &gamestate[2];
+                game->stateFlag = 2;
+                SDL_Delay(100);
+            }
+        }
+        
+        // TECLA: ESC para volver al juego desde dibujo
+        if(game->pkeys[SDL_SCANCODE_ESCAPE] && game->stateFlag == 2){
+            game->current_state = &gamestate[0]; 
+            game->stateFlag = 0;
             SDL_Delay(100);
         }
         game->current_state->handle_events(game);
@@ -101,7 +117,40 @@ int main(int argc, char* argv[]){
 
     Sprite monki = { .monki_created = 0, .dest.x = 0, .dest.y = 0};
 
-    UI pause = {.pausa = {.msg = "Pausa"},.resume = {.msg = "Resumir"}};
+    UI pause;
+    pause.pausa = (Texto*)malloc(sizeof(Texto));
+    pause.resume = (Texto*)malloc(sizeof(Texto));
+    pause.otra_cosa = (Texto*)malloc(sizeof(Texto));
+    pause.salir = (Texto*)malloc(sizeof(Texto));
+    
+    // Inicializar cada Texto
+    pause.pausa->msg = "Pausa";
+    strcpy(pause.pausa->str_buffer, "");
+    strcpy(pause.pausa->str_num, "");
+    pause.pausa->font = NULL;
+    pause.pausa->surface = NULL;
+    pause.pausa->texture = NULL;
+    
+    pause.resume->msg = "Resumir";
+    strcpy(pause.resume->str_buffer, "");
+    strcpy(pause.resume->str_num, "");
+    pause.resume->font = NULL;
+    pause.resume->surface = NULL;
+    pause.resume->texture = NULL;
+    
+    pause.otra_cosa->msg = "";
+    strcpy(pause.otra_cosa->str_buffer, "");
+    strcpy(pause.otra_cosa->str_num, "");
+    pause.otra_cosa->font = NULL;
+    pause.otra_cosa->surface = NULL;
+    pause.otra_cosa->texture = NULL;
+    
+    pause.salir->msg = "";
+    strcpy(pause.salir->str_buffer, "");
+    strcpy(pause.salir->str_num, "");
+    pause.salir->font = NULL;
+    pause.salir->surface = NULL;
+    pause.salir->texture = NULL;
 
     game.monki = &monki;
     game.pause = &pause;
@@ -112,8 +161,16 @@ int main(int argc, char* argv[]){
     int w = 600 - x; // Dimensions of rect_src
     int h = 500 - y;
     
-    printf("Created game and monito\n");
+
+    game.drawList = NULL;
+    game.isDrawing = 0;
+    game.drawType = 1;
+    game.drawFilled = 0;
+    game.drawColor = (SDL_Color){255, 0, 0, 255};
     
+    printf("Created game and monito\n");
+
+
     
     GameState juegoState= { 
         .handle_events = handle_eventsSprite, 
@@ -126,10 +183,16 @@ int main(int argc, char* argv[]){
         .update = updatePausa, 
         .render = renderPausa
     };
+    GameState drawState = { 
+        .handle_events = handle_eventsDraw, 
+        .update = updateDraw, 
+        .render = renderDraw
+    };
     
-    GameState gamestates[] = {juegoState, pausaState};
+    GameState gamestates[] = {juegoState, pausaState, drawState};
     
     game.current_state = &juegoState;
+    game.gamestates = gamestates;
 
     printf("Created gamestate\n");
     
@@ -142,12 +205,14 @@ int main(int argc, char* argv[]){
         createSprite(&game, game.monki, x,y, w, h, "Charly", "assets/monki.jpg", 1);
         
         init_Pausa(&game);
+        //init_Draw(&game); 
 
         gameLoop(&game, gamestates);
         
         destroySprite(game.monki);
-        destroyFont(game.pause->pausa.font);
-        destroyFont(game.pause->resume.font);
+        destroyFont(game.pause->pausa->font);
+        destroyFont(game.pause->resume->font);
+        destroyDraw(&game);
         
         close(&game);           
     }

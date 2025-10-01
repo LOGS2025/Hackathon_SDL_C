@@ -5,6 +5,8 @@
 #include "sprite.h"
 #include "gameloop.h"
 
+typedef struct Game Game;
+
 
 typedef struct Texto{
     SDL_Rect rect;

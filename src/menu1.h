@@ -7,17 +7,21 @@
 #include "text.h"
 
 typedef struct Game Game;
+typedef struct Texto Texto;
+typedef struct Imagen Imagen;
+
+
 
 typedef struct Tilemap{
 
 }Tilemap;
 
 typedef struct UI{
-    Texto pausa;
-    Texto otra_cosa;
-    Texto salir;
-    Texto resume;
-    Imagen fondo;
+    Texto* pausa;
+    Texto* otra_cosa;
+    Texto* salir;
+    Texto* resume;
+    Imagen* fondo;
 }UI;
 
 typedef struct MapView{

@@ -21,6 +21,15 @@ typedef struct GameState{
     int (*render)(struct Game*);
 }GameState;
 
+
+typedef struct DrawElement {
+    int type;           // 0: línea, 1: rectángulo, 2: círculo
+    SDL_Point points[2]; // Solo necesitamos 2 puntos para estas formas
+    SDL_Color color;
+    int filled;
+    struct DrawElement* next;
+} DrawElement;
+
 typedef struct Game{
     SDL_Renderer* render;
     SDL_Window* ventana;
@@ -40,7 +49,14 @@ typedef struct Game{
     UI* pause;
     UI* mapa;
     
+    DrawElement* drawList;  // Lista de elementos dibujados
+    int isDrawing;          // Flag si estamos dibujando
+    int drawType;           // Tipo de dibujo actual
+    int drawFilled;         // Relleno o contorno
+    SDL_Color drawColor;
+
     GameState* current_state;
+    GameState* gamestates;
 }Game;
 
 int gameLoop(Game* game, GameState gamestates[]);
