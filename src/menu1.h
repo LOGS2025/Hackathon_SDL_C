@@ -2,7 +2,6 @@
 #define MENU1_H
 
 #include "SDL2/SDL_ttf.h"
-#include "sprite.h"
 #include "gameloop.h"
 #include "text.h"
 

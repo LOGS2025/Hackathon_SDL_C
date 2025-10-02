@@ -23,7 +23,6 @@ void handle_eventsDraw(Game* game){
             }
             
             if(game->e.type == SDL_MOUSEBUTTONDOWN) {
-                if(game->e.button.button == SDL_BUTTON_LEFT) {
                     game->isDrawing = 1;
                     
                     // Crear nuevo elemento temporal
@@ -47,15 +46,11 @@ void handle_eventsDraw(Game* game){
                         }
                         current->next = newElement;
                     }
-                }
             }
             
-            if(game->e.type == SDL_MOUSEBUTTONUP) {
-                if(game->e.button.button == SDL_BUTTON_LEFT && game->isDrawing) {
+            if(game->e.type == SDL_MOUSEBUTTONUP && game->isDrawing) {
                     game->isDrawing = 0;
-                }
             }
-            
             if(game->e.type == SDL_MOUSEMOTION && game->isDrawing) {
                 // Actualizar el último elemento de la lista
                 DrawElement* current = game->drawList;
@@ -68,10 +63,19 @@ void handle_eventsDraw(Game* game){
             
             if(game->e.type == SDL_KEYDOWN) {
                 switch(game->e.key.keysym.sym) {
-                    case SDLK_1: setDrawType(game, 0); break; // Línea
-                    case SDLK_2: setDrawType(game, 1); break; // Rectángulo
-                    case SDLK_3: setDrawType(game, 2); break; // Círculo
-                    case SDLK_f: toggleDrawFilled(game); break;
+                    case SDLK_1: 
+                        setDrawType(game, 0);
+                        printf("Caso1\n"); 
+                        break; // Línea
+                    case SDLK_2: 
+                        setDrawType(game, 1); 
+                        break; //Rectángulo
+                    case SDLK_3: 
+                        setDrawType(game, 2); 
+                        break; // Círculo
+                    case SDLK_f: 
+                        toggleDrawFilled(game); 
+                        break;
                     case SDLK_c: // Cambiar color aleatorio
                         setDrawColor(game, rand() % 256, rand() % 256, rand() % 256, 255);
                         break;
@@ -89,13 +93,13 @@ int updateDraw(Game* game){
 }
 
 int renderDraw(Game* game){
-SDL_SetRenderDrawColor(game->render, 240, 240, 240, 255);
+    SDL_SetRenderDrawColor(game->render, 240, 240, 240, 255);
     SDL_RenderClear(game->render);
     
     // Instrucciones en la parte superior
     SDL_SetRenderDrawColor(game->render, 0, 0, 0, 255);
 
-DrawElement* current = game->drawList;
+    DrawElement* current = game->drawList;
      while(SDL_PollEvent(&game->e)) {
         if(game->e.type == SDL_QUIT) {
             game->running = 0;

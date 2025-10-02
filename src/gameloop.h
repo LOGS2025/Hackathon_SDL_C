@@ -3,9 +3,11 @@
 
 #include "sprite.h"
 #include "menu1.h"
+#include "geometry.h"
 
 typedef struct UI UI;
 typedef struct Sprite Sprite;
+typedef struct DrawElement DrawElement;
 
 typedef struct Mouse{
     int posm_x;
@@ -20,15 +22,6 @@ typedef struct GameState{
     int (*update)(struct Game*);
     int (*render)(struct Game*);
 }GameState;
-
-
-typedef struct DrawElement {
-    int type;           // 0: línea, 1: rectángulo, 2: círculo
-    SDL_Point points[2]; // Solo necesitamos 2 puntos para estas formas
-    SDL_Color color;
-    int filled;
-    struct DrawElement* next;
-} DrawElement;
 
 typedef struct Game{
     SDL_Renderer* render;

@@ -2,7 +2,6 @@
 #define TEXT_H
 
 #include "SDL2/SDL_ttf.h"
-#include "sprite.h"
 #include "gameloop.h"
 
 typedef struct Game Game;
